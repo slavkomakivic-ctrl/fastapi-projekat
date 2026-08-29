@@ -38,12 +38,24 @@ def prikazi_sve():
 
 @app.delete("/knjige/{id}")
 def obrisi_knjigu(id: int):
+    kursor.execute("SELECT * FROM knjige WHERE id = ?", (id,))
+    postoji = kursor.fetchone()
+
+    if postoji is None:
+        raise HTTPException(status_code=404, detail="knjiga sa tim brojem id ne postoji")
+
     kursor.execute("DELETE FROM knjige WHERE id = ?", (id,))
     konekcija.commit()
     return {"poruka": f"Obrisana knjiga sa id {id}"}
 
 @app.put("/knjige/{id}")
 def azuriraj_knjigu(id: int, knjiga: Knjiga):
+    kursor.execute("SELECT * FROM knjige WHERE id = ?", (id,))
+    postoji = kursor.fetchone()
+
+    if postoji is None:
+        raise HTTPException(status_code=404, detail="knjiga sa tim brojem id ne postoji")
+
     kursor.execute(
         "UPDATE knjige SET naslov = ?, godina = ?, ocjena = ? WHERE id = ?",
         (knjiga.naslov, knjiga.godina, knjiga.ocjena, id)
