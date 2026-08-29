@@ -62,3 +62,13 @@ def azuriraj_knjigu(id: int, knjiga: Knjiga):
     )
     konekcija.commit()
     return {"poruka": f"Azurirana knjiga sa id {id}"}
+
+@app.get("/knjige/{id}")
+def prikazi_knjigu_id(id: int):
+    kursor.execute("SELECT * FROM knjige WHERE id = ?", (id,))
+    knjiga = kursor.fetchone()
+
+    if knjiga is None:
+        raise HTTPException(status_code=404, detail="knjiga sa tim brojem id ne postoji")
+
+    return {"knjiga": knjiga}
