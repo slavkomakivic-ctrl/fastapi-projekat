@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from database import kursor, konekcija
-from models import Knjiga
+from models import Knjiga, Korisnik
 from auth import hesuj_lozinku
 
 router = APIRouter()
