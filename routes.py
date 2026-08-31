@@ -5,10 +5,6 @@ from auth import hesuj_lozinku
 
 router = APIRouter()
 
-class Korisnik(BaseModel):
-    korisnicko_ime: str
-    lozinka: str
-
 @router.post("/registracija")
 def registruj_korisnika(korisnik: Korisnik):
     hash_lozinke = hesuj_lozinku(korisnik.lozinka)
