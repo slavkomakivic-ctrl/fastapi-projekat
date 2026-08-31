@@ -1,9 +1,23 @@
 from fastapi import APIRouter, HTTPException
 from database import kursor, konekcija
 from models import Knjiga
+from auth import hesuj_lozinku
 
 router = APIRouter()
 
+class Korisnik(BaseModel):
+    korisnicko_ime: str
+    lozinka: str
+
+@router.post("/registracija")
+def registruj_korisnika(korisnik: Korisnik):
+    hash_lozinke = hesuj_lozinku(korisnik.lozinka)
+    kursor.execute(
+        "INSERT INTO korisnici (korisnicko_ime, lozinka_hash) VALUES (?, ?)",
+        (korisnik.korisnicko_ime, hash_lozinke)
+    )
+    konekcija.commit()
+    return {"poruka": f"Registrovan korisnik: {korisnik.korisnicko_ime}"}
 
 @router.post("/knjige")
 def dodaj_knjigu(knjiga: Knjiga):
