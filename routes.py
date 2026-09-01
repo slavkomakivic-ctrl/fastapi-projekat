@@ -15,6 +15,12 @@ def registruj_korisnika(korisnik: Korisnik):
     konekcija.commit()
     return {"poruka": f"Registrovan korisnik: {korisnik.korisnicko_ime}"}
 
+@router.get("/korisnici")
+def prikazi_sve_korisnike():
+    kursor.execute("SELECT * FROM korisnici")
+    rezultati = kursor.fetchall()
+    return {"korisnici": rezultati}
+
 @router.post("/knjige")
 def dodaj_knjigu(knjiga: Knjiga):
     kursor.execute(
